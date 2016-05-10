@@ -20,6 +20,8 @@ public class WifiService extends Service {
     private HashSet<WifiScanListener> listeners;
     private boolean scanning;
 
+    private WifiLocator wifiLocator;
+
     public class LocalBinder extends Binder {
         public WifiService getServerInstance() {
             return WifiService.this;
@@ -49,6 +51,7 @@ public class WifiService extends Service {
     public void onCreate() {
         Log.d(TAG_OTH, "on create");
         super.onCreate();
+        wifiLocator = new WifiLocator();
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         listeners = new HashSet<>(1);
         this.yourReceiver = new BroadcastReceiver() {
@@ -87,5 +90,9 @@ public class WifiService extends Service {
 
     public void unregisterListener(WifiScanListener listener) {
         listeners.remove(listener);
+    }
+
+    public WifiLocator getWifiLocator() {
+        return wifiLocator;
     }
 }

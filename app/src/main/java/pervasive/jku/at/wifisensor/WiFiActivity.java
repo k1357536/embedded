@@ -15,6 +15,7 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,8 +52,7 @@ public class WiFiActivity extends ActionBarActivity implements WifiScanListener 
     private boolean wifiBounded;
     private WifiService wifiService;
     private WifiScanToCommRelay wifiToCommRelay;
-    private WifiLogger wifiLogger;
-    private WifiLocator wifiLocator;
+    private WifiScanEvent lastEvent = null;
     private CommService commService;
     private boolean commBounded;
     private ServiceConnection commServiceConnection;
@@ -63,8 +63,6 @@ public class WiFiActivity extends ActionBarActivity implements WifiScanListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_sensor);
         wifiToCommRelay = new WifiScanToCommRelay(this);
-        wifiLogger = new WifiLogger();
-        wifiLocator = new WifiLocator();
 
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggle_wifi_scan);
         toggleButton.setOnCheckedChangeListener(toggleListener);
@@ -96,13 +94,15 @@ public class WiFiActivity extends ActionBarActivity implements WifiScanListener 
         }
     };
 
-    private AtomicInteger storeCounter =new AtomicInteger();
+    private AtomicInteger storeCounter = new AtomicInteger();
     private Button.OnClickListener saveListener = new Button.OnClickListener() {
         public void onClick(View view) {
-            String newName = "Demo" +                    storeCounter.incrementAndGet();
+            String newName = ((EditText) findViewById(R.id.locName)).getText().toString();
+            String filename = ((EditText) findViewById(R.id.logName)).getText().toString();
+            ((EditText) findViewById(R.id.locName)).setText("Entry" + storeCounter.incrementAndGet());
             Log.d(TAG_OTH, "save loc " + newName);
-            wifiLogger.save(newName);
-            wifiLocator.add(newName, wifiLogger.getLastEvent());
+            WifiLogger.save(filename, newName, lastEvent);
+            wifiService.getWifiLocator().add(newName, lastEvent);
         }
     };
 
@@ -161,7 +161,8 @@ public class WiFiActivity extends ActionBarActivity implements WifiScanListener 
         Log.d(TAG_SEN, "sensor event received from " + WIFI_SENSOR_NAME + " " + event.getMAC());
         StringBuffer sb = new StringBuffer();
 
-        Set<HashMap.Entry<String, Float>> locs = wifiLocator.getDistanceProbabilities(event).entrySet();
+        Set<HashMap.Entry<String, Float>> locs =
+                wifiService.getWifiLocator().getDistanceProbabilities(event).entrySet();
         for (HashMap.Entry<String, Float> e : locs)
             sb.append(e.getKey() + "(" + (e.getValue() * 100) + "%)\n");
 
@@ -170,8 +171,7 @@ public class WiFiActivity extends ActionBarActivity implements WifiScanListener 
             sb.append(data.BSSID + "/" + data.level + ", \n");
         }
         tc.setText(sb.toString());
-
-        wifiLogger.log(event);
+        lastEvent = event;
     }
 
     @Override

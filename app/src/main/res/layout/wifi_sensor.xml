@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
     tools:context=".WiFiActivity">
 
     <LinearLayout
@@ -22,29 +22,63 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Log" />
+
+                <EditText
+                    android:id="@+id/logName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="wifiLogfile" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name" />
+
+                <EditText
+                    android:id="@+id/locName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Entry0" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <ToggleButton
                     android:id="@+id/toggle_wifi_scan"
-                    android:layout_width="@dimen/watch_horizontal_25_percent_margin"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/wifi_scan" />
 
                 <Button
                     android:id="@+id/save_wifi_point"
-                    android:layout_width="@dimen/watch_horizontal_25_percent_margin"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Save" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/sensorContent"
-                android:layout_width="@dimen/watch_horizontal_75_percent_margin"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="" />
         </LinearLayout>

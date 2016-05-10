@@ -277,7 +277,6 @@ public class CommService extends Service implements Listener {
         setupConnection(true);
     }
 
-
     @Override
     protected void finalize() throws Throwable {
         close();

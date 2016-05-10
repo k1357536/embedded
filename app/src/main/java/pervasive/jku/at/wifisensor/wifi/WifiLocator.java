@@ -10,8 +10,8 @@ import java.util.HashMap;
  * Created by Michael Hansal on 09.05.2016.
  */
 public class WifiLocator {
-    public static final float MAX_SIGNAL = 0;
-    public static final float MIN_SIGNAL = 100;
+    public static final float MAX_SIGNAL = 100;
+    public static final float MIN_SIGNAL = 0;
 
     public class ReferenceLocation {
         public String name;
@@ -46,7 +46,6 @@ public class WifiLocator {
                 for (ScanResult scanResult : e.getResult()) {
                     if (scanResult.BSSID.equals(ssid)) {
                         comp = MAX_SIGNAL-Math.abs(scanResult.level - rssi);
-                        Log.d("lvl", scanResult.level + "/" + rssi);
                         break;
                     }
                 }
