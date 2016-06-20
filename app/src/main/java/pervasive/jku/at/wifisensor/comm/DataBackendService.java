@@ -40,8 +40,7 @@ public class DataBackendService extends Service implements Listener {
         }
     }
 
-    public DataBackendService(IRawMessageConsumer tgt) {
-        this.tgt = tgt;
+    public DataBackendService() {
         mqtt = new MQTT();
         try {
             mqtt.setHost("iot.soft.uni-linz.ac.at", 1883);
@@ -51,6 +50,11 @@ public class DataBackendService extends Service implements Listener {
 
         connection = mqtt.callbackConnection();
         connection.listener(this).connect(failureCb);
+    }
+
+
+    public void setConsumer(IRawMessageConsumer tgt){
+        this.tgt = tgt;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class DataBackendService extends Service implements Listener {
 
     @Override
     public void onPublish(UTF8Buffer topic, Buffer payload, Runnable ack) {
-        if (topic.toString().equals(locationURI))
+        if (topic.toString().equals(locationURI) && tgt != null)
             tgt.accept(payload.toByteArray());
         ack.run();
     }
