@@ -47,7 +47,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     @Override
-    public void accept(byte[] t) {
+    public void acceptMessage(byte[] t) {
         try {
             DataInputStream is = new DataInputStream(new ByteArrayInputStream(t));
             switch (is.readInt()) {
@@ -60,7 +60,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
                     s.options = new Survey.Entry[is.readInt()];
                     for (int i = 0; i < s.options.length; i++)
                         s.options[i] = new Survey.Entry(is.readUTF());
-                    client.accept(s);
+                    client.acceptSurvey(s);
                     break;
                 case TYPE_RESPONSE:
                     UUID rxId = UUID.fromString(is.readUTF());
@@ -69,6 +69,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
                         if (index <= currentSurvey.options.length)
                             currentSurvey.options[index].votes++;
                     }
+                    client.acceptIntermediateResult(currentSurvey);
                     break;
                 default:
                     break;

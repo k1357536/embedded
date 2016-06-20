@@ -44,9 +44,9 @@ public class Survey {
     }
 
     public String toResults() {
-        StringBuilder sb = new StringBuilder("'" + question + "': \n");
+        StringBuilder sb = new StringBuilder(question + "\n");
         for (int i = 0; i < options.length; i++)
-            sb.append("  '" + options[i].text + "':" + options[i].votes + " \n");
+            sb.append(options[i].text + ": " + options[i].votes + "\n");
         return sb.toString();
     }
 }

@@ -1,11 +1,5 @@
 package pervasive.jku.at.wifisensor.comm;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
-
 import org.fusesource.hawtbuf.Buffer;
 import org.fusesource.hawtbuf.UTF8Buffer;
 import org.fusesource.mqtt.client.Callback;
@@ -61,7 +55,7 @@ public class CommunicationAdapter implements Listener {
     @Override
     public void onPublish(UTF8Buffer topic, Buffer payload, Runnable ack) {
         if (topic.toString().equals(locationURI) && tgt != null)
-            tgt.accept(payload.toByteArray());
+            tgt.acceptMessage(payload.toByteArray());
         ack.run();
     }
 

@@ -91,10 +91,14 @@ public class StartScreenActivity extends AppCompatActivity {
                 ServiceHandler.GetSurveyEncoder().updateLocation("HS1");
                 ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
                     @Override
-                    public void accept(Survey s) {
+                    public void acceptSurvey(Survey s) {
                         currentSurvey = s;
                         Handler h = new Handler(StartScreenActivity.this.getMainLooper());
                         h.post(surveyReceived);
+                    }
+
+                    @Override
+                    public void acceptIntermediateResult(Survey s) {
                     }
                 });
             }
