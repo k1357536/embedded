@@ -20,14 +20,14 @@ import java.net.URISyntaxException;
 /**
  * Created by Michael Hansal on 20.06.2016.
  */
-public class DataBackendService implements Listener {
+public class CommunicationAdapter implements Listener {
     private MQTT mqtt;
     private CallbackConnection connection;
     private String locationURI = null;
     private static final String uriPrefix = "at.jku.pervasive.es16.Test1_alpha.";
     private IRawMessageConsumer tgt;
 
-    public DataBackendService(IRawMessageConsumer tgt) {
+    public CommunicationAdapter(IRawMessageConsumer tgt) {
         mqtt = new MQTT();
         this.tgt = tgt;
         try {

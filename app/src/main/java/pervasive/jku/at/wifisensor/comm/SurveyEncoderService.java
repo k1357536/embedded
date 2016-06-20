@@ -1,13 +1,10 @@
 package pervasive.jku.at.wifisensor.comm;
 
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +18,7 @@ import java.util.UUID;
  */
 public class SurveyEncoderService extends Service implements IRawMessageConsumer {
     private ServiceConnection dataBackendCon;
-    private DataBackendService dataBackend;
+    private CommunicationAdapter dataBackend;
     private Survey currentSurvey;
     private ISurveyConsumer client;
 
@@ -42,7 +39,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     public SurveyEncoderService() {
-        dataBackend = new DataBackendService(this);
+        dataBackend = new CommunicationAdapter(this);
     }
 
     public void setSurveyConsumer(ISurveyConsumer client){
