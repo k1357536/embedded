@@ -19,7 +19,8 @@ public class StartScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_screen);
         InitListeners();
         StartServices();
-        ClearAndShowWaitingScreen();
+        SurveyReceived("Is apple juice juicy today?", new String[] { "Yes", "No", "Maybe", "Depends" });
+        //ClearAndShowWaitingScreen();
     }
 
     private View.OnClickListener sendAnswerListener = new View.OnClickListener() {
@@ -33,6 +34,13 @@ public class StartScreenActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             ToggleWiFiService();
+        }
+    };
+
+    private View.OnClickListener toggleMQServiceListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ToggleMQSservice();
         }
     };
 
@@ -60,7 +68,9 @@ public class StartScreenActivity extends AppCompatActivity {
     private void InitListeners() {
         ((Spinner)findViewById(R.id.sAnswerItems)).setOnItemSelectedListener(answerSelected);
         findViewById(R.id.bCreateSurvey).setOnClickListener(createSurveyListener);
+        findViewById(R.id.bToggleMQS).setOnClickListener(toggleMQServiceListener);
         findViewById(R.id.bToggleWifi).setOnClickListener(toggleWifiListener);
+        findViewById(R.id.bOk).setOnClickListener(sendAnswerListener);
     }
 
     private void StartServices() {
@@ -78,6 +88,7 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void SendSurveyAnswer(String answer) {
+        ClearAndShowWaitingScreen();
         //ToDo: Answer the survey
     }
 
