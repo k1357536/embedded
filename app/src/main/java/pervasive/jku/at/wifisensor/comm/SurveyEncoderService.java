@@ -123,7 +123,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     private void bindDataBackendService() {
-        Intent mIntent = new Intent(this, CommService.class);
+        Intent mIntent = new Intent(this, DataBackendService.class);
         dataBackendCon = new ServiceConnection() {
 
             public void onServiceDisconnected(ComponentName name) {
@@ -136,6 +136,5 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
         };
         bindService(mIntent, dataBackendCon, BIND_AUTO_CREATE);
         startService(mIntent);
-
     }
 }
