@@ -97,7 +97,7 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
         ServiceHandler.SetSurveyEncoderForCurrentActivity(this, new IConnectionReceivedHandler() {
             @Override
             public void ConnectionReceived() {
-                ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
+                ServiceHandler.GetSurveyEncoder().addSurveyConsumer(new ISurveyConsumer() {
                     @Override
                     public void acceptSurvey(Survey s) {
                         currentSurvey = s;
