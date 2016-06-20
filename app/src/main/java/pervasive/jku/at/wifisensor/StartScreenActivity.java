@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import pervasive.jku.at.wifisensor.comm.IConnectionReceivedHandler;
 import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
 import pervasive.jku.at.wifisensor.comm.ServiceHandler;
 import pervasive.jku.at.wifisensor.comm.Survey;
@@ -35,7 +36,7 @@ public class StartScreenActivity extends AppCompatActivity {
     private View.OnClickListener sendAnswerListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            SendSurveyAnswer(((Spinner)findViewById(R.id.sAnswerItems)).getSelectedItem().toString());
+            SendSurveyAnswer();
         }
     };
 
@@ -83,13 +84,17 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void StartServices() {
-        ServiceHandler.SetSurveyEncoderForCurrentActivity(this);
-        ServiceHandler.GetSurveyEncoder().updateLocation("HS1");
-        ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
+        ServiceHandler.SetSurveyEncoderForCurrentActivity(this, new IConnectionReceivedHandler() {
             @Override
-            public void accept(Survey s) {
-                currentSurvey = s;
-                SurveyReceived();
+            public void ConnectionReceived() {
+                ServiceHandler.GetSurveyEncoder().updateLocation("HS1");
+                ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
+                    @Override
+                    public void accept(Survey s) {
+                        currentSurvey = s;
+                        SurveyReceived();
+                    }
+                });
             }
         });
     }
@@ -104,7 +109,7 @@ public class StartScreenActivity extends AppCompatActivity {
         //ToDo: Enable/Disable service
     }
 
-    private void SendSurveyAnswer(String answer) {
+    private void SendSurveyAnswer() {
         ServiceHandler.GetSurveyEncoder().answerSurvery(currentSurvey, ((Spinner)findViewById(R.id.sAnswerItems)).getSelectedItemPosition());
         ClearAndShowWaitingScreen();
     }
