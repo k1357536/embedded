@@ -5,10 +5,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 public class CreateSurveyActivity extends AppCompatActivity {
     @Override
@@ -48,7 +46,8 @@ public class CreateSurveyActivity extends AppCompatActivity {
         for(int currentChild = 0; currentChild < linearLayout.getChildCount(); currentChild++)
             answers[currentChild] = ((EditText)linearLayout.getChildAt(currentChild)).getText().toString();
 
-        Intent myIntent = new Intent(CreateSurveyActivity.this, StartScreen.class);
+        Intent myIntent = new Intent(CreateSurveyActivity.this, StartScreenActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(myIntent);
     }
 }
