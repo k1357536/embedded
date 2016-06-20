@@ -68,8 +68,8 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
                         int index = is.readInt();
                         if (index <= currentSurvey.options.length)
                             currentSurvey.options[index].votes++;
+                        client.acceptIntermediateResult(currentSurvey);
                     }
-                    client.acceptIntermediateResult(currentSurvey);
                     break;
                 default:
                     break;
