@@ -19,8 +19,7 @@ public class StartScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_screen);
         InitListeners();
         StartServices();
-        SurveyReceived("Is apple juice juicy today?", new String[] { "Yes", "No", "Maybe", "Depends" });
-        //ClearAndShowWaitingScreen();
+        ClearAndShowWaitingScreen();
     }
 
     private View.OnClickListener sendAnswerListener = new View.OnClickListener() {
@@ -74,7 +73,7 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void StartServices() {
-        //ToDo: Start services
+        
     }
 
     private void ToggleWiFiService() {

@@ -18,7 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Survey question" />
+            android:text="Survey question"
+            android:textSize="14dp"
+            android:textColor="#FF0066FF" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -31,8 +33,8 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
                 android:text="Close Survey"
                 android:id="@+id/bEndSurvey" />
         </LinearLayout>
@@ -41,7 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Result" />
+            android:text="Result"
+            android:textSize="14dp"
+            android:textColor="#FF0066FF" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,10 +55,11 @@
             android:text="Pending" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
             android:text="Return to start"
-            android:id="@+id/bReturn" />
+            android:id="@+id/bReturn"
+            android:enabled="false" />
 
     </LinearLayout>
 </FrameLayout>
