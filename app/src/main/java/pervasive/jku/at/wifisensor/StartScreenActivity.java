@@ -20,15 +20,24 @@ import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
 import pervasive.jku.at.wifisensor.comm.ServiceHandler;
 import pervasive.jku.at.wifisensor.comm.Survey;
 import pervasive.jku.at.wifisensor.comm.SurveyEncoderService;
+import pervasive.jku.at.wifisensor.wifi.WifiScanEvent;
+import pervasive.jku.at.wifisensor.wifi.WifiScanListener;
+import pervasive.jku.at.wifisensor.wifi.WifiService;
 
-public class StartScreenActivity extends AppCompatActivity {
+public class StartScreenActivity extends AppCompatActivity implements WifiScanListener {
 
     private Survey currentSurvey;
+    private boolean surveyProcessing = false;
+    private  Handler handler;
+
+       private WifiService wifiService;
+    private ServiceConnection wifiServiceConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_screen);
+        handler = new Handler(this.getMainLooper());
         InitListeners();
         StartServices();
         ClearAndShowWaitingScreen();
@@ -88,13 +97,11 @@ public class StartScreenActivity extends AppCompatActivity {
         ServiceHandler.SetSurveyEncoderForCurrentActivity(this, new IConnectionReceivedHandler() {
             @Override
             public void ConnectionReceived() {
-                ServiceHandler.GetSurveyEncoder().updateLocation("HS1");
                 ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
                     @Override
                     public void acceptSurvey(Survey s) {
                         currentSurvey = s;
-                        Handler h = new Handler(StartScreenActivity.this.getMainLooper());
-                        h.post(surveyReceived);
+                        handler.post(surveyReceived);
                     }
 
                     @Override
@@ -103,6 +110,21 @@ public class StartScreenActivity extends AppCompatActivity {
                 });
             }
         });
+
+        Intent mIntent = new Intent(this, WifiService.class);
+        wifiServiceConnection = new ServiceConnection() {
+            public void onServiceDisconnected(ComponentName name) {
+                wifiService = null;
+            }
+
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                WifiService.LocalBinder mLocalBinder = (WifiService.LocalBinder) service;
+                wifiService = mLocalBinder.getServerInstance();
+                wifiService.registerListener(StartScreenActivity.this);
+                //((ToggleButton) findViewById(R.id.toggle_wifi_scan)).setChecked(wifiService.isScanning());
+            }
+        };
+        bindService(mIntent, wifiServiceConnection, BIND_AUTO_CREATE);
     }
 
     private void ToggleWiFiService() {
@@ -123,7 +145,9 @@ public class StartScreenActivity extends AppCompatActivity {
     public Runnable surveyReceived = new Runnable() {
         @Override
         public void run() {
-            if (currentSurvey.question.isEmpty() || currentSurvey.options.length == 0) return;
+            if (currentSurvey.question.isEmpty() || currentSurvey.options.length == 0 || surveyProcessing) return;
+
+            surveyProcessing = true;
 
         /* Toggle the visibility of the question */
             findViewById(R.id.lCurrentSurvey).setVisibility(View.VISIBLE);
@@ -156,9 +180,29 @@ public class StartScreenActivity extends AppCompatActivity {
         /* Set the new visibility */
         findViewById(R.id.lCurrentSurvey).setVisibility(View.INVISIBLE);
         findViewById(R.id.lLastSurvey).setVisibility(View.VISIBLE);
+
+        surveyProcessing = false;
     }
 
     private void setButtonEnabled(boolean state) {
         findViewById(R.id.bOk).setEnabled(state);
+    }
+
+    private String lastLoc = "";
+
+    @Override
+    public void onWifiChanged(WifiScanEvent event) {
+        final String loc = wifiService.getWifiLocator().getPosition(event);
+
+        if (!loc.equals(lastLoc)) {
+            ServiceHandler.GetSurveyEncoder().updateLocation(loc);
+            Handler h = new Handler(StartScreenActivity.this.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((TextView) findViewById(R.id.tRoom)).setText(loc);
+                }
+            });
+        }
     }
 }

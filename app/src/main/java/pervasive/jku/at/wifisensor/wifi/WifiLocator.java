@@ -24,7 +24,6 @@ public class WifiLocator {
     }
 
     private ArrayList<ReferenceLocation> references = new ArrayList<>();
-    ;
 
     public void add(String newName, WifiScanEvent lastEvent) {
         HashMap<String, Integer> values = new HashMap<>();
@@ -56,5 +55,37 @@ public class WifiLocator {
             result.put(ref.name, sum / ref.readings.size());
         }
         return result;
+    }
+
+    public String getPosition(WifiScanEvent e){
+        double maxValue = Double.NEGATIVE_INFINITY;
+        String currentLocation="unknown";
+
+        for (ReferenceLocation ref : references) {
+            float sum = 0;
+
+            for (HashMap.Entry<String, Integer> entry : ref.readings.entrySet()) {
+                String ssid = entry.getKey();
+                int rssi = entry.getValue();
+
+                float comp = 0;
+                for (ScanResult scanResult : e.getResult()) {
+                    if (scanResult.BSSID.equals(ssid)) {
+                        comp = MAX_SIGNAL - Math.abs(scanResult.level - rssi);
+                        break;
+                    }
+                }
+                comp -= MIN_SIGNAL;
+                comp /= (MAX_SIGNAL - MIN_SIGNAL);
+                sum += comp;
+            }
+
+            double value = sum / ref.readings.size();
+            if (value > maxValue) {
+                maxValue = value;
+                currentLocation = ref.name;
+            }
+        }
+        return currentLocation;
     }
 }
