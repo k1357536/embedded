@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 /**
  * Created by Thomas on 20.06.2016.
@@ -31,7 +32,11 @@ public class ServiceHandler {
             }
         };
 
-        activity.bindService(intent, serviceConnection, activity.BIND_AUTO_CREATE);
-        activity.startService(intent);
+        if (!activity.bindService(intent, serviceConnection, activity.BIND_AUTO_CREATE))
+            Log.d("SV", "Bind failed");
+        else if (activity.startService(intent) == null)
+            Log.d("SV", "Start failed");
+        else
+            Log.d("SV", "Encoder bound to Backend");
     }
 }
