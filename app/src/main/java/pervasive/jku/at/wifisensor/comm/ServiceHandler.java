@@ -32,7 +32,7 @@ public class ServiceHandler {
             }
         };
 
-        if (!activity.bindService(intent, serviceConnection, activity.BIND_AUTO_CREATE))
+        if (!activity.getApplicationContext().bindService(intent, serviceConnection, activity.BIND_AUTO_CREATE))
             Log.d("SV", "Bind failed");
         else if (activity.startService(intent) == null)
             Log.d("SV", "Start failed");
