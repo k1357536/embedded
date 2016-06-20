@@ -5,13 +5,11 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
 import pervasive.jku.at.wifisensor.comm.ServiceHandler;
 import pervasive.jku.at.wifisensor.comm.Survey;
-import pervasive.jku.at.wifisensor.comm.SurveyEncoderService;
 
 public class SurveyResultActivity extends AppCompatActivity {
     String currentResult = "";
@@ -40,7 +38,7 @@ public class SurveyResultActivity extends AppCompatActivity {
     private void InitListeners() {
         findViewById(R.id.bEndSurvey).setOnClickListener(closeSurveyListener);
         findViewById(R.id.bReturn).setOnClickListener(returnToStartListener);
-        ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
+        ServiceHandler.GetSurveyEncoder().addSurveyConsumer(new ISurveyConsumer() {
             @Override
             public void acceptSurvey(Survey s) {
             }

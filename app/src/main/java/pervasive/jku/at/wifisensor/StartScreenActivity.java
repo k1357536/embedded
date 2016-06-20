@@ -1,12 +1,8 @@
 package pervasive.jku.at.wifisensor;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +15,6 @@ import pervasive.jku.at.wifisensor.comm.IConnectionReceivedHandler;
 import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
 import pervasive.jku.at.wifisensor.comm.ServiceHandler;
 import pervasive.jku.at.wifisensor.comm.Survey;
-import pervasive.jku.at.wifisensor.comm.SurveyEncoderService;
 
 public class StartScreenActivity extends AppCompatActivity {
 
@@ -89,7 +84,7 @@ public class StartScreenActivity extends AppCompatActivity {
             @Override
             public void ConnectionReceived() {
                 ServiceHandler.GetSurveyEncoder().updateLocation("HS1");
-                ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
+                ServiceHandler.GetSurveyEncoder().addSurveyConsumer(new ISurveyConsumer() {
                     @Override
                     public void acceptSurvey(Survey s) {
                         currentSurvey = s;
