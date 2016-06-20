@@ -24,7 +24,7 @@ public class DataBackendService implements Listener {
     private MQTT mqtt;
     private CallbackConnection connection;
     private String locationURI = null;
-    private static final String uriPrefix = "at.jku.pervasive.es16.ChrFasHan.";
+    private static final String uriPrefix = "at.jku.pervasive.es16.Test1_alpha.";
     private IRawMessageConsumer tgt;
 
     public DataBackendService(IRawMessageConsumer tgt) {

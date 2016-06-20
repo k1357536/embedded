@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import pervasive.jku.at.wifisensor.comm.ServiceHandler;
+import pervasive.jku.at.wifisensor.comm.Survey;
+
 public class SurveyResultActivity extends AppCompatActivity {
 
     @Override
@@ -41,9 +44,9 @@ public class SurveyResultActivity extends AppCompatActivity {
     }
 
     private void CloseSurvey() {
-        //ToDo: Close survey and show result.
+        Survey s = ServiceHandler.GetSurveyEncoder().finishSurvey();
 
-        ((TextView)findViewById(R.id.tResult)).setText(""); //ToDo: Result text.
+        ((TextView)findViewById(R.id.tResult)).setText(s.toResults()); //ToDo: Result text.
         findViewById(R.id.bReturn).setEnabled(true); //Make it possible to leave this view.
         findViewById(R.id.bEndSurvey).setEnabled(false);
     }
