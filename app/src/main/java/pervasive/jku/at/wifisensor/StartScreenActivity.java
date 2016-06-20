@@ -3,6 +3,7 @@ package pervasive.jku.at.wifisensor;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,6 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pervasive.jku.at.wifisensor.comm.IConnectionReceivedHandler;
 import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
@@ -28,7 +32,7 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
 
     private Survey currentSurvey;
     private boolean surveyProcessing = false;
-    private  Handler handler;
+    private Handler handler;
 
        private WifiService wifiService;
     private ServiceConnection wifiServiceConnection;
@@ -41,6 +45,8 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
         InitListeners();
         StartServices();
         ClearAndShowWaitingScreen();
+
+        onWifiChanged(new WifiScanEvent("00:00:00:00:00:00", new ArrayList<ScanResult>(), 0));
     }
 
     private View.OnClickListener sendAnswerListener = new View.OnClickListener() {
