@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import pervasive.jku.at.wifisensor.comm.ServiceHandler;
+import pervasive.jku.at.wifisensor.comm.Survey;
+
 public class CreateSurveyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +49,10 @@ public class CreateSurveyActivity extends AppCompatActivity {
         for(int currentChild = 0; currentChild < linearLayout.getChildCount(); currentChild++)
             answers[currentChild] = ((EditText)linearLayout.getChildAt(currentChild)).getText().toString();
 
-        //ToDo: Upload question with answers
+        /* Actually start the survey */
+        ServiceHandler.GetSurveyEncoder().startSurvey(new Survey(question, answers));
 
         Intent myIntent = new Intent(CreateSurveyActivity.this, SurveyResultActivity.class);
-        //myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         myIntent.putExtra("Question", question);
         startActivity(myIntent);
         finish();
