@@ -28,6 +28,14 @@
             android:name=".comm.CommService"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".comm.SurveyEncoderService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".comm.DataBackendService"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity android:name=".StartScreenActivity" android:screenOrientation="landscape">
             <intent-filter>
