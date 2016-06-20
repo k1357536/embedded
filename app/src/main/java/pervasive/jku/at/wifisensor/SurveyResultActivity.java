@@ -45,8 +45,7 @@ public class SurveyResultActivity extends AppCompatActivity {
 
     private void CloseSurvey() {
         Survey s = ServiceHandler.GetSurveyEncoder().finishSurvey();
-
-        ((TextView)findViewById(R.id.tResult)).setText(s.toResults()); //ToDo: Result text.
+        ((TextView)findViewById(R.id.tResult)).setText(s.toResults());
         findViewById(R.id.bReturn).setEnabled(true); //Make it possible to leave this view.
         findViewById(R.id.bEndSurvey).setEnabled(false);
     }

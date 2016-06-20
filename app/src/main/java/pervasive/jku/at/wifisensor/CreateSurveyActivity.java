@@ -24,7 +24,7 @@ public class CreateSurveyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 LinearLayout answerLayout = (LinearLayout)findViewById(R.id.lAnswerLayout);
-                if(!((EditText)answerLayout.getChildAt(answerLayout.getChildCount() - 1)).getText().toString().equals(""))
+                if(answerLayout.getChildCount() <= 0 || !((EditText)answerLayout.getChildAt(answerLayout.getChildCount() - 1)).getText().toString().equals(""))
                     AddAnswer();
             }
         });

@@ -33,10 +33,17 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Close Survey"
+                android:text="Stop"
                 android:id="@+id/bEndSurvey" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Return"
+                android:id="@+id/bReturn"
+                android:enabled="false" />
         </LinearLayout>
 
         <TextView
@@ -47,19 +54,18 @@
             android:textSize="14dp"
             android:textColor="#FF0066FF" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/tResult"
-            android:text="Pending" />
-
-        <Button
+        <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="Return to start"
-            android:id="@+id/bReturn"
-            android:enabled="false" />
+            android:layout_height="fill_parent"
+            android:id="@+id/scrollView" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/tResult"
+                android:text="Pending" />
+        </ScrollView>
 
     </LinearLayout>
 </FrameLayout>
