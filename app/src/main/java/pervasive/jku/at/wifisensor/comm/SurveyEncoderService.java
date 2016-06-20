@@ -41,7 +41,11 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
         }
     }
 
-    public SurveyEncoderService(ISurveyConsumer client) {
+    public SurveyEncoderService() {
+        bindDataBackendService();
+    }
+
+    public void setSurveyConsumer(ISurveyConsumer client){
         this.client = client;
     }
 
