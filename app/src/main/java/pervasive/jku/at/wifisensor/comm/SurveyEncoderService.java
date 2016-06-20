@@ -136,7 +136,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
             public void onServiceConnected(ComponentName name, IBinder service) {
                 DataBackendService.LocalBinder mLocalBinder = (DataBackendService.LocalBinder) service;
                 dataBackend = mLocalBinder.getServerInstance();
-                dataBackend.setConsumer(this);
+                dataBackend.setConsumer(SurveyEncoderService.this);
             }
         };
         bindService(mIntent, dataBackendCon, BIND_AUTO_CREATE);

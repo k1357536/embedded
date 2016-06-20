@@ -49,7 +49,8 @@
                     android:text="Ok"
                     android:id="@+id/bOk"
                     android:layout_gravity="center|right"
-                    android:gravity="fill_vertical" />
+                    android:gravity="fill_vertical"
+                    android:enabled="false" />
             </LinearLayout>
 
         </LinearLayout>

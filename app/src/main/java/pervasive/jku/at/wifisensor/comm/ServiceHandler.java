@@ -16,13 +16,14 @@ public class ServiceHandler {
         return encoderService;
     }
 
-    public static void SetSurveyEncoderForCurrentActivity(AppCompatActivity activity) {
+    public static void SetSurveyEncoderForCurrentActivity(AppCompatActivity activity, final IConnectionReceivedHandler handler) {
         Intent intent = new Intent(activity, SurveyEncoderService.class);
         ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 SurveyEncoderService.LocalBinder localBinder = (SurveyEncoderService.LocalBinder)service;
                 encoderService = localBinder.getServerInstance();
+                handler.ConnectionReceived();
             }
 
             @Override
