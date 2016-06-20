@@ -1,7 +1,10 @@
 package pervasive.jku.at.wifisensor;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,7 +14,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
+import pervasive.jku.at.wifisensor.comm.ServiceHandler;
+import pervasive.jku.at.wifisensor.comm.Survey;
+import pervasive.jku.at.wifisensor.comm.SurveyEncoderService;
+
 public class StartScreenActivity extends AppCompatActivity {
+
+    private Survey currentSurvey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +83,15 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void StartServices() {
-        
+        ServiceHandler.SetSurveyEncoderForCurrentActivity(this);
+        ServiceHandler.GetSurveyEncoder().updateLocation("HS1");
+        ServiceHandler.GetSurveyEncoder().setSurveyConsumer(new ISurveyConsumer() {
+            @Override
+            public void accept(Survey s) {
+                currentSurvey = s;
+                SurveyReceived();
+            }
+        });
     }
 
     private void ToggleWiFiService() {
@@ -87,19 +105,23 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void SendSurveyAnswer(String answer) {
+        ServiceHandler.GetSurveyEncoder().answerSurvery(currentSurvey, ((Spinner)findViewById(R.id.sAnswerItems)).getSelectedItemPosition());
         ClearAndShowWaitingScreen();
-        //ToDo: Answer the survey
     }
 
-    public void SurveyReceived(String question, String[] answers){
-        if(question.isEmpty() || answers.length == 0) return;
+    public void SurveyReceived(){
+        if(currentSurvey.question.isEmpty() || currentSurvey.options.length == 0) return;
 
         /* Toggle the visibility of the question */
         findViewById(R.id.lCurrentSurvey).setVisibility(View.VISIBLE);
         findViewById(R.id.lLastSurvey).setVisibility(View.INVISIBLE);
 
+        String[] answers = new String[currentSurvey.options.length];
+        for(int currentAnswerIndex = 0; currentAnswerIndex < answers.length; currentAnswerIndex++)
+            answers[currentAnswerIndex] = currentSurvey.options[currentAnswerIndex].text;
+
         /* Set the content */
-        ((TextView)findViewById(R.id.tSuveryConent)).setText(question);
+        ((TextView)findViewById(R.id.tSuveryConent)).setText(currentSurvey.question);
         ((Spinner)findViewById(R.id.sAnswerItems)).setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, answers));
 
         /* Make it possible to answer */

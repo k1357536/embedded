@@ -52,5 +52,6 @@ public class CreateSurveyActivity extends AppCompatActivity {
         //myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         myIntent.putExtra("Question", question);
         startActivity(myIntent);
+        finish();
     }
 }

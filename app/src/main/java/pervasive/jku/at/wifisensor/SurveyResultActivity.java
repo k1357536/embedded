@@ -45,11 +45,13 @@ public class SurveyResultActivity extends AppCompatActivity {
 
         ((TextView)findViewById(R.id.tResult)).setText(""); //ToDo: Result text.
         findViewById(R.id.bReturn).setEnabled(true); //Make it possible to leave this view.
+        findViewById(R.id.bEndSurvey).setEnabled(false);
     }
 
     private void ReturnToStart() {
         Intent myIntent = new Intent(SurveyResultActivity.this, StartScreenActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(myIntent);
+        finish();
     }
 }
