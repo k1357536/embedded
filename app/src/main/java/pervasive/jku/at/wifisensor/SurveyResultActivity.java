@@ -1,8 +1,10 @@
 package pervasive.jku.at.wifisensor;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class SurveyResultActivity extends AppCompatActivity {
 
@@ -11,20 +13,41 @@ public class SurveyResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_result);
         InitListeners();
+        InitUIValues();
     }
 
     private View.OnClickListener closeSurveyListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            
+            CloseSurvey();
         }
-    }
+    };
+
+    private View.OnClickListener returnToStartListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ReturnToStart();
+        }
+    };
 
     private void InitListeners() {
+        findViewById(R.id.bEndSurvey).setOnClickListener(closeSurveyListener);
+        findViewById(R.id.bReturn).setOnClickListener(returnToStartListener);
+    }
 
+    private void InitUIValues() {
+        ((TextView)findViewById(R.id.tQuestion)).setText(getIntent().getStringExtra("Question"));
     }
 
     private void CloseSurvey() {
-        //ToDo: Close survey
+        //ToDo: Close survey and show result.
+
+        ((TextView)findViewById(R.id.tResult)).setText(""); //ToDo: Result text.
+    }
+
+    private void ReturnToStart() {
+        Intent myIntent = new Intent(SurveyResultActivity.this, StartScreenActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(myIntent);
     }
 }

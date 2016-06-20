@@ -46,8 +46,11 @@ public class CreateSurveyActivity extends AppCompatActivity {
         for(int currentChild = 0; currentChild < linearLayout.getChildCount(); currentChild++)
             answers[currentChild] = ((EditText)linearLayout.getChildAt(currentChild)).getText().toString();
 
-        Intent myIntent = new Intent(CreateSurveyActivity.this, StartScreenActivity.class);
-        myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        //ToDo: Upload question with answers
+
+        Intent myIntent = new Intent(CreateSurveyActivity.this, SurveyResultActivity.class);
+        //myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        myIntent.putExtra("Question", question);
         startActivity(myIntent);
     }
 }

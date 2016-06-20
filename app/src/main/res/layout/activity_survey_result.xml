@@ -47,6 +47,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/tResult" />
+            android:id="@+id/tResult"
+            android:text="Pending" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Return to start"
+            android:id="@+id/bReturn" />
+
     </LinearLayout>
 </FrameLayout>
