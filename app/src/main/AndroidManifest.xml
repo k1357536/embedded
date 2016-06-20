@@ -36,7 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateSurveyActivity"></activity>
+        <activity android:name=".CreateSurveyActivity" />
+        <activity android:name=".SurveyResultActivity"></activity>
     </application>
 
 </manifest>
