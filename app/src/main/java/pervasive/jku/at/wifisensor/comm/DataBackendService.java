@@ -20,28 +20,16 @@ import java.net.URISyntaxException;
 /**
  * Created by Michael Hansal on 20.06.2016.
  */
-public class DataBackendService extends Service implements Listener {
+public class DataBackendService implements Listener {
     private MQTT mqtt;
     private CallbackConnection connection;
     private String locationURI = null;
     private static final String uriPrefix = "at.jku.pervasive.es16.ChrFasHan.";
     private IRawMessageConsumer tgt;
 
-    private IBinder mBinder = new LocalBinder();
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    public class LocalBinder extends Binder {
-        public DataBackendService getServerInstance() {
-            return DataBackendService.this;
-        }
-    }
-
-    public DataBackendService() {
+    public DataBackendService(IRawMessageConsumer tgt) {
         mqtt = new MQTT();
+        this.tgt = tgt;
         try {
             mqtt.setHost("iot.soft.uni-linz.ac.at", 1883);
         } catch (URISyntaxException e) {
@@ -50,11 +38,6 @@ public class DataBackendService extends Service implements Listener {
 
         connection = mqtt.callbackConnection();
         connection.listener(this).connect(failureCb);
-    }
-
-
-    public void setConsumer(IRawMessageConsumer tgt){
-        this.tgt = tgt;
     }
 
     @Override

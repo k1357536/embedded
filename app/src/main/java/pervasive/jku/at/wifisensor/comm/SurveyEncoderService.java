@@ -42,7 +42,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     public SurveyEncoderService() {
-        bindDataBackendService();
+        dataBackend = new DataBackendService(this);
     }
 
     public void setSurveyConsumer(ISurveyConsumer client){
@@ -82,6 +82,8 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     public void startSurvey(Survey s) {
+        if(dataBackend == null)
+            return;
         try {
             currentSurvey = s;
 
@@ -107,6 +109,8 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     public void answerSurvery(Survey s, int anserId) {
+        if(dataBackend == null)
+            return;
         try {
             if (anserId >= s.options.length)
                 return;
@@ -123,27 +127,7 @@ public class SurveyEncoderService extends Service implements IRawMessageConsumer
     }
 
     public void updateLocation(String loc) {
+        if(dataBackend != null)
         dataBackend.setLocation(loc);
-    }
-
-    private void bindDataBackendService() {
-        Intent mIntent = new Intent(this, DataBackendService.class);
-        dataBackendCon = new ServiceConnection() {
-
-            public void onServiceDisconnected(ComponentName name) {
-            }
-
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                DataBackendService.LocalBinder mLocalBinder = (DataBackendService.LocalBinder) service;
-                dataBackend = mLocalBinder.getServerInstance();
-                dataBackend.setConsumer(SurveyEncoderService.this);
-            }
-        };
-        if (!bindService(mIntent, dataBackendCon, BIND_AUTO_CREATE))
-            Log.d("ENC", "Bind failed");
-        else if (startService(mIntent) == null)
-            Log.d("ENC", "Start failed");
-        else
-            Log.d("ENC", "Encoder bound to Backend");
     }
 }
