@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -76,7 +77,7 @@ public class StartScreenActivity extends AppCompatActivity {
     };
 
     private void InitListeners() {
-        ((Spinner)findViewById(R.id.sAnswerItems)).setOnItemSelectedListener(answerSelected);
+        ((Spinner) findViewById(R.id.sAnswerItems)).setOnItemSelectedListener(answerSelected);
         findViewById(R.id.bCreateSurvey).setOnClickListener(createSurveyListener);
         findViewById(R.id.bToggleMQS).setOnClickListener(toggleMQServiceListener);
         findViewById(R.id.bToggleWifi).setOnClickListener(toggleWifiListener);
@@ -92,7 +93,8 @@ public class StartScreenActivity extends AppCompatActivity {
                     @Override
                     public void accept(Survey s) {
                         currentSurvey = s;
-                        SurveyReceived();
+                        Handler h = new Handler(StartScreenActivity.this.getMainLooper());
+                        h.post(surveyReceived);
                     }
                 });
             }
@@ -100,47 +102,51 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void ToggleWiFiService() {
-        ToggleButton toggleWifiButton = (ToggleButton)findViewById(R.id.bToggleWifi);
+        ToggleButton toggleWifiButton = (ToggleButton) findViewById(R.id.bToggleWifi);
         //ToDo: Enable/Disable service
     }
 
     private void ToggleMQSservice() {
-        ToggleButton toggleMQSButton = (ToggleButton)findViewById(R.id.bToggleMQS);
+        ToggleButton toggleMQSButton = (ToggleButton) findViewById(R.id.bToggleMQS);
         //ToDo: Enable/Disable service
     }
 
     private void SendSurveyAnswer() {
-        ServiceHandler.GetSurveyEncoder().answerSurvery(currentSurvey, ((Spinner)findViewById(R.id.sAnswerItems)).getSelectedItemPosition());
+        ServiceHandler.GetSurveyEncoder().answerSurvery(currentSurvey, ((Spinner) findViewById(R.id.sAnswerItems)).getSelectedItemPosition());
         ClearAndShowWaitingScreen();
     }
 
-    public void SurveyReceived(){
-        if(currentSurvey.question.isEmpty() || currentSurvey.options.length == 0) return;
+    public Runnable surveyReceived = new Runnable() {
+        @Override
+        public void run() {
+            if (currentSurvey.question.isEmpty() || currentSurvey.options.length == 0) return;
 
         /* Toggle the visibility of the question */
-        findViewById(R.id.lCurrentSurvey).setVisibility(View.VISIBLE);
-        findViewById(R.id.lLastSurvey).setVisibility(View.INVISIBLE);
+            findViewById(R.id.lCurrentSurvey).setVisibility(View.VISIBLE);
+            findViewById(R.id.lLastSurvey).setVisibility(View.INVISIBLE);
 
-        String[] answers = new String[currentSurvey.options.length];
-        for(int currentAnswerIndex = 0; currentAnswerIndex < answers.length; currentAnswerIndex++)
-            answers[currentAnswerIndex] = currentSurvey.options[currentAnswerIndex].text;
+            String[] answers = new String[currentSurvey.options.length];
+            for (int currentAnswerIndex = 0; currentAnswerIndex < answers.length; currentAnswerIndex++)
+                answers[currentAnswerIndex] = currentSurvey.options[currentAnswerIndex].text;
 
         /* Set the content */
-        ((TextView)findViewById(R.id.tSuveryConent)).setText(currentSurvey.question);
-        ((Spinner)findViewById(R.id.sAnswerItems)).setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, answers));
+            ((TextView) findViewById(R.id.tSuveryConent)).setText(currentSurvey.question);
+            ((Spinner) findViewById(R.id.sAnswerItems)).setAdapter(
+                    new ArrayAdapter<String>(StartScreenActivity.this, android.R.layout.simple_spinner_item, answers));
 
         /* Make it possible to answer */
-        setButtonEnabled(true);
-    }
+            setButtonEnabled(true);
+        }
+    };
 
     /***
      * Clears the view by deleting the old values and toggling another
      * linearLayout's visibility.
      */
-    public void ClearAndShowWaitingScreen(){
+    public void ClearAndShowWaitingScreen() {
         /* Clear the current survey view */
-        ((TextView)findViewById(R.id.tSuveryConent)).setText("");
-        ((Spinner)findViewById(R.id.sAnswerItems)).setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[] { }));
+        ((TextView) findViewById(R.id.tSuveryConent)).setText("");
+        ((Spinner) findViewById(R.id.sAnswerItems)).setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{}));
         setButtonEnabled(false);
 
         /* Set the new visibility */
@@ -148,7 +154,7 @@ public class StartScreenActivity extends AppCompatActivity {
         findViewById(R.id.lLastSurvey).setVisibility(View.VISIBLE);
     }
 
-    private void setButtonEnabled(boolean state){
+    private void setButtonEnabled(boolean state) {
         findViewById(R.id.bOk).setEnabled(state);
     }
 }
