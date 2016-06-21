@@ -12,6 +12,8 @@ import android.util.Log;
 
 import java.util.HashSet;
 
+import pervasive.jku.at.wifisensor.WifiLogger;
+
 public class WifiService extends Service {
 
     private static final String TAG_OTH = "ws";
@@ -52,6 +54,7 @@ public class WifiService extends Service {
         Log.d(TAG_OTH, "on create");
         super.onCreate();
         wifiLocator = new WifiLocator();
+        WifiLogger.load("jku", wifiLocator);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         listeners = new HashSet<>(1);
         this.yourReceiver = new BroadcastReceiver() {

@@ -14,7 +14,7 @@ public class WifiLocator {
     public static final float MIN_SIGNAL = 0;
     public static final String UNKNOWN_LOCATION = "Unknown";
 
-    public class ReferenceLocation {
+    public static class ReferenceLocation {
         public String name;
         public HashMap<String, Integer> readings;
 
@@ -31,6 +31,10 @@ public class WifiLocator {
         for (ScanResult sr : lastEvent.getResult())
             values.put(sr.BSSID, sr.level);
         references.add(new ReferenceLocation(newName, values));
+    }
+
+    public void add(ReferenceLocation loc) {
+        references.add(loc);
     }
 
     public HashMap<String, Float> getDistanceProbabilities(WifiScanEvent e) {
