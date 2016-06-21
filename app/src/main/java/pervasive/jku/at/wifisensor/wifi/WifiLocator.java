@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class WifiLocator {
     public static final float MAX_SIGNAL = 100;
     public static final float MIN_SIGNAL = 0;
+    public static final String UNKNOWN_LOCATION = "Unknown";
 
     public class ReferenceLocation {
         public String name;
@@ -59,7 +60,7 @@ public class WifiLocator {
 
     public String getPosition(WifiScanEvent e){
         double maxValue = Double.NEGATIVE_INFINITY;
-        String currentLocation="unknown";
+        String currentLocation = UNKNOWN_LOCATION;
 
         for (ReferenceLocation ref : references) {
             float sum = 0;

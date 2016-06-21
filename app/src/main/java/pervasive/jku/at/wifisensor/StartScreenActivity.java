@@ -24,6 +24,7 @@ import pervasive.jku.at.wifisensor.comm.ISurveyConsumer;
 import pervasive.jku.at.wifisensor.comm.ServiceHandler;
 import pervasive.jku.at.wifisensor.comm.Survey;
 import pervasive.jku.at.wifisensor.comm.SurveyEncoderService;
+import pervasive.jku.at.wifisensor.wifi.WifiLocator;
 import pervasive.jku.at.wifisensor.wifi.WifiScanEvent;
 import pervasive.jku.at.wifisensor.wifi.WifiScanListener;
 import pervasive.jku.at.wifisensor.wifi.WifiService;
@@ -34,7 +35,7 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
     private boolean surveyProcessing = false;
     private Handler handler;
 
-       private WifiService wifiService;
+    private WifiService wifiService;
     private ServiceConnection wifiServiceConnection;
 
     @Override
@@ -46,7 +47,8 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
         StartServices();
         ClearAndShowWaitingScreen();
 
-        onWifiChanged(new WifiScanEvent("00:00:00:00:00:00", new ArrayList<ScanResult>(), 0));
+        //Init the default location for the GUI
+        ((TextView)findViewById(R.id.tRoom)).setText(WifiLocator.UNKNOWN_LOCATION);
     }
 
     private View.OnClickListener sendAnswerListener = new View.OnClickListener() {
@@ -103,6 +105,7 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
         ServiceHandler.SetSurveyEncoderForCurrentActivity(this, new IConnectionReceivedHandler() {
             @Override
             public void ConnectionReceived() {
+                ServiceHandler.GetSurveyEncoder().updateLocation(WifiLocator.UNKNOWN_LOCATION);
                 ServiceHandler.GetSurveyEncoder().addSurveyConsumer(new ISurveyConsumer() {
                     @Override
                     public void acceptSurvey(Survey s) {
@@ -201,10 +204,8 @@ public class StartScreenActivity extends AppCompatActivity implements WifiScanLi
     @Override
     public void onWifiChanged(WifiScanEvent event) {
         final String loc = wifiService.getWifiLocator().getPosition(event);
-
-        if (!loc.equals(lastLoc)) {
+        if (!loc.equals(lastLoc) && !loc.equals(WifiLocator.UNKNOWN_LOCATION)) {
             ServiceHandler.GetSurveyEncoder().updateLocation(loc);
-            Handler h = new Handler(StartScreenActivity.this.getMainLooper());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
